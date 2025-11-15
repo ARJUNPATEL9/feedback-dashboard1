@@ -9,12 +9,12 @@
     "dev": "node --watch api/feedback.js"
   },
   "engines": {
-    "node": ">=18.0.0"
+    "node": "20.x"
   },
   "dependencies": {
     "express": "^4.18.2",
     "cors": "^2.8.5",
-    "better-sqlite3": "^9.2.2"
+    "better-sqlite3": "^11.8.0"
   },
   "devDependencies": {
     "nodemon": "^3.0.2"

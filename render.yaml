@@ -4,6 +4,7 @@ services:
     env: node
     plan: free
     rootDir: backend
+    nodeVersion: 20
     buildCommand: npm install --legacy-peer-deps
     startCommand: node api/feedback.js
     envVars:
@@ -11,6 +12,6 @@ services:
         value: production
     disk:
       name: feedback-db
-      mountPath: /opt/render/project/src/backend
+      mountPath: /opt/render/project/src
       sizeGB: 1
 
