@@ -8,7 +8,7 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
-// Use persistent disk path on Render, or project root locally
+// Use persistent disk path on Render, or backend root locally
 const dbPath = process.env.DATABASE_PATH || path.join(__dirname, '../feedback.db');
 const db = new Database(dbPath);
 

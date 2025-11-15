@@ -12,49 +12,79 @@ A full-stack application for collecting, managing, and analyzing customer feedba
 
 ## Project Structure
 
-\`\`\`
+```
 .
-├── api/
-│   └── feedback.js          # Express API server
-├── app/
-│   ├── page.tsx             # Main dashboard page
-│   ├── layout.tsx           # Root layout
-│   └── globals.css          # Global styles
-├── components/
-│   ├── feedback-form.tsx    # Feedback submission form
-│   ├── analytics-cards.tsx  # Analytics statistics cards
-│   ├── feedback-table.tsx   # Feedback data table
-│   └── ui/                  # Shadcn UI components
-├── scripts/
-│   └── init-db.sql          # Database initialization script
-├── package.json             # Frontend dependencies
-├── package.json.backend     # Backend dependencies
+├── frontend/              # Next.js frontend application
+│   ├── app/              # Next.js app directory
+│   ├── components/       # React components
+│   ├── hooks/            # Custom React hooks
+│   ├── lib/              # Utility functions
+│   ├── public/           # Static assets
+│   ├── styles/           # Global styles
+│   ├── package.json      # Frontend dependencies
+│   └── ...
+├── backend/              # Express.js backend API
+│   ├── api/              # API routes
+│   │   └── feedback.js   # Main API server
+│   ├── scripts/          # Database scripts
+│   ├── feedback.db       # SQLite database (created automatically)
+│   └── package.json        # Backend dependencies
+├── render.yaml           # Render deployment config
+├── vercel.json           # Vercel deployment config
 └── README.md
-\`\`\`
+```
 
 ## Getting Started
 
+### Prerequisites
+
+- Node.js 18+ and npm
+- Git
+
 ### Backend Setup
 
-1. Copy `package.json.backend` to root as backup reference
+1. Navigate to the backend directory:
+   ```bash
+   cd backend
+   ```
+
 2. Install dependencies:
-   \`\`\`bash
-   npm install express cors better-sqlite3
-   \`\`\`
+   ```bash
+   npm install --legacy-peer-deps
+   ```
 
 3. Start the API server:
-   \`\`\`bash
-   node api/feedback.js
-   \`\`\`
+   ```bash
+   npm start
+   # or for development with auto-reload:
+   npm run dev
+   ```
 
 The API will run on `http://localhost:5000`
 
 ### Frontend Setup
 
-1. Frontend runs in the v0 Preview environment
-2. Set environment variable in project settings:
-   - `NEXT_PUBLIC_API_URL=http://localhost:5000` (for local development)
-   - `NEXT_PUBLIC_API_URL=https://your-api-url.com` (for production)
+1. Navigate to the frontend directory:
+   ```bash
+   cd frontend
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install --legacy-peer-deps
+   ```
+
+3. Create a `.env.local` file (optional for local development):
+   ```env
+   NEXT_PUBLIC_API_URL=http://localhost:5000
+   ```
+
+4. Start the development server:
+   ```bash
+   npm run dev
+   ```
+
+The frontend will run on `http://localhost:3000`
 
 ## API Endpoints
 
@@ -62,17 +92,17 @@ The API will run on `http://localhost:5000`
 Submit new feedback
 
 **Request Body:**
-\`\`\`json
+```json
 {
   "name": "John Doe",
   "email": "john@example.com",
   "message": "Great product!",
   "rating": 5
 }
-\`\`\`
+```
 
 **Response:**
-\`\`\`json
+```json
 {
   "id": 1,
   "name": "John Doe",
@@ -81,13 +111,13 @@ Submit new feedback
   "rating": 5,
   "createdAt": "2024-01-15T10:30:00.000Z"
 }
-\`\`\`
+```
 
 ### GET /api/feedback
 Fetch all feedbacks (sorted by newest first)
 
 **Response:**
-\`\`\`json
+```json
 [
   {
     "id": 1,
@@ -98,33 +128,46 @@ Fetch all feedbacks (sorted by newest first)
     "createdAt": "2024-01-15T10:30:00.000Z"
   }
 ]
-\`\`\`
+```
 
 ### GET /api/stats
 Get analytics data
 
 **Response:**
-\`\`\`json
+```json
 {
   "total": 10,
   "avgRating": 4.2,
   "positive": 7,
   "negative": 2
 }
-\`\`\`
+```
+
+### GET /health
+Health check endpoint
+
+**Response:**
+```json
+{
+  "status": "ok"
+}
+```
 
 ## Deployment
 
-### Frontend (Vercel)
-1. Push code to GitHub
-2. Connect repository to Vercel
-3. Set environment variable: `NEXT_PUBLIC_API_URL=your-backend-url`
-4. Deploy
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for detailed deployment instructions to Render (backend) and Vercel (frontend).
 
-### Backend (Render/Railway/Cyclic)
-1. Deploy `api/feedback.js` as a Node.js service
-2. The SQLite database will be created automatically on first run
-3. Persist the database file using volume mounting
+### Quick Deploy
+
+**Backend (Render):**
+- Root Directory: `backend`
+- Build Command: `npm install --legacy-peer-deps`
+- Start Command: `node api/feedback.js`
+
+**Frontend (Vercel):**
+- Root Directory: `frontend`
+- Framework: Next.js (auto-detected)
+- Environment Variable: `NEXT_PUBLIC_API_URL` = your Render backend URL
 
 ## Database
 
@@ -135,6 +178,8 @@ SQLite database with single `feedbacks` table:
 - `message`: Feedback message (required)
 - `rating`: 1-5 rating (required)
 - `createdAt`: Timestamp (auto-set)
+
+The database is automatically created on first run in the `backend/` directory.
 
 ## Bonus Features
 

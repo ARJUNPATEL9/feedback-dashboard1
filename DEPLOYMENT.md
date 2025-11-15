@@ -23,7 +23,7 @@ This guide will help you deploy the Feedback Management Dashboard to Render (bac
    - **Name**: `feedback-api` (or any name you prefer)
    - **Region**: Choose closest to you
    - **Branch**: `main`
-   - **Root Directory**: Leave empty (root)
+   - **Root Directory**: `backend` ⚠️ **IMPORTANT: Set this to `backend`**
    - **Environment**: `Node`
    - **Build Command**: `npm install --legacy-peer-deps`
    - **Start Command**: `node api/feedback.js`
@@ -40,7 +40,7 @@ In the Render dashboard, add these environment variables:
 3. Click **"Add Disk"**
 4. Configure:
    - **Name**: `feedback-db`
-   - **Mount Path**: `/opt/render/project/src` (or project root)
+   - **Mount Path**: `/opt/render/project/src/backend` (or `/opt/render/project/src` if rootDir is set)
    - **Size**: 1 GB (minimum)
 
 **Note**: The persistent disk ensures your SQLite database persists across deployments.
@@ -70,7 +70,7 @@ You should see: `{"status":"ok"}`
 
 ### Step 3: Configure Project
 1. **Framework Preset**: Next.js (auto-detected)
-2. **Root Directory**: `./` (root)
+2. **Root Directory**: `frontend` ⚠️ **IMPORTANT: Set this to `frontend`**
 3. **Build Command**: `npm run build` (auto-filled)
 4. **Output Directory**: `.next` (auto-filled)
 5. **Install Command**: `npm install --legacy-peer-deps`
@@ -101,16 +101,17 @@ You should see: `{"status":"ok"}`
 
 **Database not persisting:**
 - Ensure persistent disk is mounted correctly
-- Check disk mount path matches in render.yaml
-- Verify database file path in `api/feedback.js`
+- Check disk mount path matches the root directory setting
+- Verify database file path in `backend/api/feedback.js`
 
 **Build fails:**
 - Check build logs in Render dashboard
 - Ensure `--legacy-peer-deps` flag is used
 - Verify Node.js version (Render uses latest LTS)
+- Make sure Root Directory is set to `backend`
 
 **CORS errors:**
-- Verify CORS is enabled in `api/feedback.js` (already configured)
+- Verify CORS is enabled in `backend/api/feedback.js` (already configured)
 - Check if frontend URL is allowed (CORS allows all origins currently)
 
 ### Frontend Issues (Vercel)
@@ -119,11 +120,13 @@ You should see: `{"status":"ok"}`
 - Verify `NEXT_PUBLIC_API_URL` environment variable is set correctly
 - Check Render service is running and accessible
 - Test Render API directly: `https://your-api.onrender.com/health`
+- Ensure Root Directory is set to `frontend`
 
 **Build fails:**
 - Check build logs in Vercel dashboard
-- Ensure all dependencies are in package.json
+- Ensure all dependencies are in `frontend/package.json`
 - Try clearing Vercel cache and redeploying
+- Verify Root Directory is set to `frontend`
 
 ---
 
@@ -159,4 +162,8 @@ Update the frontend environment variable if you change the backend URL.
 - **Database**: SQLite works well for small to medium applications. For production with high traffic, consider PostgreSQL (Render offers managed PostgreSQL).
 
 - **Environment Variables**: Never commit `.env` files. Always set them in the platform dashboards.
+
+- **Root Directories**: 
+  - Render: Set Root Directory to `backend`
+  - Vercel: Set Root Directory to `frontend`
 
