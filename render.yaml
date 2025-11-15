@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: feedback-api
+    env: node
+    plan: free
+    buildCommand: npm install --legacy-peer-deps
+    startCommand: node api/feedback.js
+    envVars:
+      - key: NODE_ENV
+        value: production
+    disk:
+      name: feedback-db
+      mountPath: /opt/render/project/src
+      sizeGB: 1
+
